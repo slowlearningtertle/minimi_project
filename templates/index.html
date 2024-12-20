@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>Stock Data Viewer</title>
+</head>
+<body>
+    <h1>Stock Data Viewer</h1>
+    <label for="ticker">Ticker:</label>
+    <input type="text" id="ticker" placeholder="AAPL">
+    <label for="start_date">Start Date:</label>
+    <input type="date" id="start_date">
+    <label for="end_date">End Date:</label>
+    <input type="date" id="end_date">
+    <button onclick="loadStockData()">Fetch Data</button>
+        
+    <div style="width: 400px; height: 200px;">    
+        <canvas id="myChart" width="400" height="200"></canvas>
+    </div>
+
+    <script>
+        function loadStockData(){
+        const ticker = document.getElementById('ticker').value;
+        const startDate = document.getElementById('start_date').value;
+        const endDate = document.getElementById('end_date').value;
+        const url = `load_data?ticker=${ticker}&start_date=${startDate}&end_date=${endDate}`;
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                // 여기에 데이터를 처리하는 로직을 추가하세요.
+                const ctx = document.getElementById('myChart').getContext('2d');
+                const myChart = new Chart(ctx, {
+                    type: 'line', // 차트 유형 (line, bar, pie 등)
+                    data: {
+                        labels: data.map(item => new Date(item.Date).toLocaleDateString()),
+                        datasets: [{
+                            label: ticker,
+                            data: data.map(item => item.Close),
+                            fill: false,
+                            borderColor: 'rgb(75, 192, 192)',
+                            tension: 0.1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        scales:{
+                            y:{
+                                display: false,
+                                grid: {
+                                    display: true 
+                                }
+                            },
+                            x: {
+                                display: false,
+                                grid: {
+                                    display: true 
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                display: true,
+                                position: 'top',
+                            },
+                            title: {
+                                display: true,
+                                text: 'Stock Price Chart'
+                            }
+                        }
+                    }
+                });
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    </script>
+</body>
+</html>
