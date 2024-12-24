@@ -1,5 +1,5 @@
 {
-    "python.defaultInterpreterPath": "E:/labs_python/.venv/Scripts/python.exe",
+    "python.defaultInterpreterPath": "F:/for_coding_folder/for_python/.venv/Scripts/python.exe",
     "jupyter.notebookFileRoot": "${workspaceFolder}",
     "python.terminal.executeInFileDir": false,
     "terminal.integrated.env.windows": {
